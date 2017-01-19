@@ -21,7 +21,11 @@ $SPEC{handle_cmd} = {
         %App::lcpan::dist_args,
         as => {
             schema => 'dirname*',
+            pos => 1,
         },
+    },
+    deps => {
+        prog => 'git',
     },
 };
 sub handle_cmd {
