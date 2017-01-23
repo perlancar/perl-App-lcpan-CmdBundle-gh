@@ -1,3 +1,8 @@
+0.003   2017-01-23 (PERLANCAR)
+
+	- [ux] Accept module_or_dist instead of just dist.
+
+
 0.002   2017-01-20 (PERLANCAR)
 
 	- No functional changes.
