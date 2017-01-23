@@ -15,20 +15,34 @@ our %SPEC;
 
 $SPEC{handle_cmd} = {
     v => 1.1,
-    summary => 'Open the GitHub project page of a dist',
+    summary => 'Open the GitHub project page of a module/dist',
     args => {
         %App::lcpan::common_args,
-        %App::lcpan::dist_args,
+        %App::lcpan::mod_or_dist_args,
     },
 };
 sub handle_cmd {
     my %args = @_;
-    my $dist = $args{dist};
 
     my $state = App::lcpan::_init(\%args, 'ro');
     my $dbh = $state->{dbh};
 
-    my $res = App::lcpan::Cmd::dist_meta::handle_cmd(%args);
+    my ($dist, $file_id);
+    {
+        # first find dist
+        if (($file_id) = $dbh->selectrow_array(
+            "SELECT file_id FROM dist WHERE name=? AND is_latest", {}, $args{module_or_dist})) {
+            $dist = $args{module_or_dist};
+            last;
+        }
+        # try mod
+        if (($file_id, $dist) = $dbh->selectrow_array("SELECT m.file_id, d.name FROM module m JOIN dist d ON m.file_id=d.file_id WHERE m.name=?", {}, $args{module_or_dist})) {
+            last;
+        }
+    }
+    $file_id or return [404, "No such module/dist '$args{module_or_dist}'"];
+
+    my $res = App::lcpan::Cmd::dist_meta::handle_cmd(%args, dist=>$dist);
     return [412, $res->[1]] unless $res->[0] == 200;
     my $meta = $res->[2];
 
