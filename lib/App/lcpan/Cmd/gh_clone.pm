@@ -15,7 +15,7 @@ our %SPEC;
 
 $SPEC{handle_cmd} = {
     v => 1.1,
-    summary => 'Clone github repo of a dist',
+    summary => 'Clone github repo of a module/dist',
     args => {
         %App::lcpan::common_args,
         %App::lcpan::dist_args,
