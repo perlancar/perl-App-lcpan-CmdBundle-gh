@@ -6,7 +6,7 @@ package App::lcpan::Cmd::gh_clone;
 use 5.010001;
 use strict;
 use warnings;
-use Log::Any::IfLOG '$log';
+use Log::ger;
 
 require App::lcpan;
 require App::lcpan::Cmd::dist_meta;
